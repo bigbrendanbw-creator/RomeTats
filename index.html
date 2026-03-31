@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RomeTats | Black & Grey Realism | Clearlake, CA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #080808;
+            --dark: #0f0f0f;
+            --darker: #111111;
+            --red: #8b0000;
+            --red-mid: #b30000;
+            --red-bright: #cc2200;
+            --red-glow: rgba(139,0,0,0.4);
+            --gray: #777;
+            --light: #aaa;
+            --white: #e8e8e8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: 'Inter', system-ui, sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* CUSTOM CURSOR */
+        #cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--red-bright);
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+            mix-blend-mode: normal;
+        }
+
+        #cursor-ring {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(139,0,0,0.6);
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: left 0.12s ease, top 0.12s ease;
+        }
+
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s;
+        }
+
+        nav.scrolled {
+            background: rgba(8,8,8,0.97);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2.5rem;
+            border-bottom: 1px solid rgba(139,0,0,0.25);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .nav-logo span { color: var(--red-bright); }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--white); }
+
+        .nav-book {
+            background: var(--red) !important;
+            color: var(--white) !important;
+            padding: 0.55rem 1.3rem !important;
+            border-radius: 2px;
+            transition: background 0.3s !important;
+        }
+
+        .nav-book:hover { background: var(--red-mid) !important; }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: none;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 1.5px;
+            background: var(--white);
+            display: block;
+        }
+
+        /* HERO */
+        #hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #smoke-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.85) 100%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 1.5rem;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.75rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--red-bright);
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(4rem, 12vw, 9rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--white);
+            position: relative;
+        }
+
+        .hero-title.glitch {
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% {
+                text-shadow: none;
+                transform: none;
+            }
+            91% {
+                text-shadow: -3px 0 var(--red-bright), 3px 0 #001aff;
+                transform: translate(-1px, 0);
+            }
+            92% {
+                text-shadow: 3px 0 var(--red-bright), -3px 0 #001aff;
+                transform: translate(2px, 0);
+            }
+            93% {
+                text-shadow: -2px 0 var(--red-bright);
+                transform: translate(0, 1px);
+            }
+            94% {
+                text-shadow: none;
+                transform: none;
+            }
+            96% {
+                text-shadow: 2px 0 #001aff, -2px 0 var(--red-bright);
+                transform: translate(1px, -1px);
+            }
+            97% {
+                text-shadow: none;
+                transform: skewX(-3deg);
+            }
+            98% {
+                text-shadow: none;
+                transform: none;
+            }
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 1px;
+            background: var(--red-bright);
+            margin: 1.5rem auto;
+            box-shadow: 0 0 10px var(--red-bright);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--light);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-location {
+            font-size: 0.78rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-red {
+            background: var(--red);
+            color: var(--white);
+            padding: 0.9rem 2.2rem;
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            transition: background 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--red);
+        }
+
+        .btn-red:hover {
+            background: var(--red-mid);
+            box-shadow: 0 0 20px var(--red-glow);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--white);
+            padding: 0.9rem 2.2rem;
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .btn-ghost:hover {
+            border-color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: float 2.5s ease-in-out infinite;
+        }
+
+        .hero-scroll-bar {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, rgba(139,0,0,0.8), transparent);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        /* SECTIONS */
+        section { padding: 6rem 2rem; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            color: var(--red-bright);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .section-sub {
+            color: var(--gray);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        /* BLOOD DIVIDER */
+        .blood-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 0 auto 4rem;
+            max-width: 300px;
+        }
+
+        .blood-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--red));
+        }
+
+        .blood-line.right {
+            background: linear-gradient(to left, transparent, var(--red));
+        }
+
+        .blood-diamond {
+            width: 8px;
+            height: 8px;
+            background: var(--red-bright);
+            transform: rotate(45deg);
+            box-shadow: 0 0 8px var(--red-bright);
+        }
+
+        /* ABOUT */
+        #about { background: var(--dark); }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .about-photo-wrap {
+            position: relative;
+        }
+
+        .about-photo-box {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #1a0000, #0d0d0d);
+            border: 1px solid rgba(139,0,0,0.25);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* To add artist photo, place an img tag inside .about-photo-box */
+        .about-photo-box img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .about-photo-icon { font-size: 3rem; opacity: 0.2; }
+
+        .about-corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-color: var(--red);
+            border-style: solid;
+        }
+
+        .about-corner.tl { top: -8px; left: -8px; border-width: 2px 0 0 2px; }
+        .about-corner.br { bottom: -8px; right: -8px; border-width: 0 2px 2px 0; }
+
+        .about-text {}
+
+        .about-text h2 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .about-text p {
+            color: var(--light);
+            line-height: 1.9;
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        .about-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .about-tag {
+            background: rgba(139,0,0,0.15);
+            border: 1px solid rgba(139,0,0,0.3);
+            color: var(--light);
+            padding: 0.4rem 0.9rem;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        /* MY WORK */
+        #work { background: var(--black); }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            border-radius: 3px;
+            background: #111;
+            cursor: none;
+        }
+
+        .gallery-item:nth-child(3n+2) { aspect-ratio: 3/4; margin-top: 2rem; }
+
+        /* To add photos: place <img src="your-photo.jpg" alt="Tattoo"> inside each .gallery-item */
+        .gallery-item img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease, filter 0.5s ease;
+            filter: grayscale(0.3) brightness(0.85);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.06);
+            filter: grayscale(0) brightness(1);
+        }
+
+        .gallery-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.15);
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: linear-gradient(160deg, #140000, #0d0d0d);
+            border: 1px solid rgba(139,0,0,0.12);
+        }
+
+        .gallery-placeholder-icon { font-size: 2.5rem; opacity: 0.2; }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(139,0,0,0.6) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
+        }
+
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+        .gallery-overlay-text {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .gallery-more {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .gallery-instagram {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.75rem 1.5rem;
+            border-radius: 2px;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .gallery-instagram:hover {
+            color: var(--white);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* STYLES SECTION */
+        #styles { background: var(--darker); }
+
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .style-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(139,0,0,0.2);
+            border-radius: 4px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: border-color 0.3s, background 0.3s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .style-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red-bright), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .style-card:hover {
+            border-color: rgba(139,0,0,0.5);
+            background: rgba(139,0,0,0.05);
+            transform: translateY(-4px);
+        }
+
+        .style-card:hover::before { opacity: 1; }
+
+        .style-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.2rem;
+            display: block;
+            filter: grayscale(0.5);
+        }
+
+        .style-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .style-card p {
+            color: var(--gray);
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
+
+        /* BOOKING */
+        #booking {
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(139,0,0,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .booking-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .booking-inner h2 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+        }
+
+        .booking-inner p {
+            color: var(--light);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+
+        .booking-phone {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--red);
+            color: var(--white);
+            text-decoration: none;
+            padding: 1.2rem 3rem;
+            border-radius: 2px;
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
+            letter-spacing: 3px;
+            transition: background 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--red);
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-phone:hover {
+            background: var(--red-mid);
+            box-shadow: 0 0 40px var(--red-glow), 0 0 80px rgba(139,0,0,0.2);
+        }
+
+        .booking-phone-icon { font-size: 1.4rem; }
+
+        .booking-note {
+            color: var(--gray);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            line-height: 1.8;
+        }
+
+        .booking-details {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .booking-detail {
+            text-align: center;
+        }
+
+        .booking-detail-label {
+            color: var(--red-bright);
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .booking-detail-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--light);
+        }
+
+        /* BOOKING TABS */
+        .booking-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 2.5rem;
+            border: 1px solid rgba(139,0,0,0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2.5rem;
+        }
+
+        .booking-tab {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: none;
+            font-family: inherit;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .booking-tab:not(:last-child) {
+            border-right: 1px solid rgba(139,0,0,0.3);
+        }
+
+        .booking-tab.active {
+            background: var(--red);
+            color: var(--white);
+        }
+
+        .booking-tab:hover:not(.active) {
+            background: rgba(139,0,0,0.1);
+            color: var(--white);
+        }
+
+        .booking-tab-panel { transition: opacity 0.3s; }
+        .booking-tab-panel.hidden { display: none; }
+
+        /* BOOKING FORM */
+        .booking-form { text-align: left; }
+
+        .bform-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .bform-group { margin-bottom: 1rem; }
+
+        .bform-group label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .bform-group input,
+        .bform-group select,
+        .bform-group textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(139,0,0,0.25);
+            border-radius: 3px;
+            padding: 0.85rem 1rem;
+            color: var(--white);
+            font-size: 0.92rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .bform-group input:focus,
+        .bform-group select:focus,
+        .bform-group textarea:focus {
+            border-color: var(--red-bright);
+            background: rgba(139,0,0,0.07);
+        }
+
+        .bform-group select option { background: #0f0f0f; }
+        .bform-group textarea { resize: vertical; min-height: 110px; }
+
+        .bform-submit {
+            width: 100%;
+            background: var(--red);
+            color: var(--white);
+            border: none;
+            padding: 1rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: none;
+            font-family: inherit;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .bform-submit:hover {
+            background: var(--red-mid);
+            box-shadow: 0 0 20px var(--red-glow);
+        }
+
+        .bform-success {
+            display: none;
+            color: var(--red-bright);
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 2rem 0;
+            letter-spacing: 1px;
+        }
+
+        /* EMAIL SIGNUP */
+        #signup {
+            background: #0a0000;
+            border-top: 1px solid rgba(139,0,0,0.2);
+            border-bottom: 1px solid rgba(139,0,0,0.2);
+            padding: 4rem 2rem;
+        }
+
+        .signup-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .signup-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .signup-sub {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .signup-input {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(139,0,0,0.3);
+            border-radius: 3px;
+            padding: 0.9rem 1.2rem;
+            color: var(--white);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .signup-input:focus {
+            border-color: var(--red-bright);
+            background: rgba(139,0,0,0.07);
+        }
+
+        .signup-btn {
+            background: var(--red);
+            color: var(--white);
+            border: none;
+            padding: 0.9rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: none;
+            font-family: inherit;
+            border-radius: 3px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .signup-btn:hover {
+            background: var(--red-mid);
+            box-shadow: 0 0 20px var(--red-glow);
+        }
+
+        .signup-success {
+            display: none;
+            color: var(--red-bright);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.5rem 0;
+            letter-spacing: 1px;
+        }
+
+        .signup-fine {
+            color: rgba(255,255,255,0.2);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .signup-inner { grid-template-columns: 1fr; gap: 2rem; }
+            .bform-row { grid-template-columns: 1fr; }
+        }
+
+        /* FOOTER */
+        footer {
+            background: #050505;
+            border-top: 1px solid rgba(139,0,0,0.2);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo span { color: var(--red-bright); }
+
+        .footer-tagline {
+            color: var(--gray);
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-copy {
+            color: rgba(255,255,255,0.15);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        /* FADE IN */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.15s; }
+        .delay-2 { transition-delay: 0.3s; }
+        .delay-3 { transition-delay: 0.45s; }
+
+        /* FLICKER */
+        .flicker {
+            animation: flicker 6s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.4; }
+        }
+
+        /* ── TOUCH DEVICES: restore normal cursor ── */
+        @media (hover: none) {
+            body { cursor: auto; }
+            #cursor, #cursor-ring { display: none; }
+        }
+
+        /* ── TABLET ── */
+        @media (max-width: 900px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+            .gallery-item:nth-child(3n+2) { margin-top: 0; }
+            .styles-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 768px) {
+            /* Global */
+            section { padding: 4rem 1.25rem; }
+            #signup { padding: 3rem 1.25rem; }
+
+            /* Nav */
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            nav { padding: 1.2rem 1.25rem; }
+            nav.scrolled { padding: 0.9rem 1.25rem; }
+            .nav-logo { font-size: 1.3rem; }
+
+            /* Hero */
+            #hero { min-height: 100svh; }
+            .hero-eyebrow { font-size: 0.65rem; letter-spacing: 3px; }
+            .hero-divider { margin: 1rem auto; }
+            .hero-subtitle { font-size: 0.72rem; letter-spacing: 2.5px; }
+            .hero-location { font-size: 0.68rem; }
+            .hero-buttons { flex-direction: column; align-items: center; gap: 0.75rem; }
+            .btn-red, .btn-ghost {
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+                padding: 1rem 1.5rem;
+                font-size: 0.72rem;
+            }
+
+            /* Section headers */
+            .section-title { letter-spacing: 1px; }
+            .section-sub { font-size: 0.9rem; }
+
+            /* About */
+            .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .about-photo-wrap { max-width: 240px; margin: 0 auto; }
+            .about-text h2 { font-size: 1.8rem; }
+            .about-tags { gap: 0.4rem; }
+            .about-tag { font-size: 0.68rem; padding: 0.35rem 0.75rem; }
+
+            /* Gallery */
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
+            .gallery-item { aspect-ratio: 1/1; }
+
+            /* Styles */
+            .styles-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .style-card { padding: 2rem 1.5rem; }
+
+            /* Booking */
+            .booking-inner { padding: 0 0.25rem; }
+            .booking-tabs { max-width: 100%; }
+            .booking-tab { padding: 0.9rem 0.5rem; font-size: 0.7rem; min-height: 48px; }
+            .booking-phone {
+                padding: 1rem 1.5rem;
+                font-size: clamp(1.1rem, 6vw, 1.4rem);
+                letter-spacing: 2px;
+                width: 100%;
+                justify-content: center;
+            }
+            .booking-details { gap: 1.25rem; flex-wrap: wrap; }
+            .booking-detail-value { font-size: 0.85rem; }
+            .bform-row { grid-template-columns: 1fr; }
+            .bform-group input,
+            .bform-group select,
+            .bform-group textarea { font-size: 16px; min-height: 48px; }
+            .bform-group textarea { min-height: 100px; }
+            .bform-submit { min-height: 52px; font-size: 0.75rem; }
+
+            /* Signup */
+            .signup-inner { grid-template-columns: 1fr; gap: 2rem; }
+            .signup-title { font-size: 1.5rem; }
+            .signup-input { font-size: 16px; min-height: 48px; }
+            .signup-btn { min-height: 52px; }
+
+            /* Footer */
+            .footer-links { gap: 1.2rem; }
+            .footer-links a { font-size: 0.7rem; }
+        }
+
+        /* ── SMALL PHONES ── */
+        @media (max-width: 380px) {
+            .hero-title { letter-spacing: -1px; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .gallery-item { aspect-ratio: 4/3; }
+            .booking-phone { font-size: 1rem; letter-spacing: 1px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+    <div class="nav-logo">Rome<span>Tats</span></div>
+    <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#work">My Work</a></li>
+        <li><a href="#styles">Styles</a></li>
+        <li><a href="#booking" class="nav-book">Book Now</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+    <canvas id="smoke-canvas"></canvas>
+    <div class="hero-vignette"></div>
+    <div class="hero-content">
+        <div class="hero-eyebrow">Clearlake, California · Private Studio</div>
+        <h1 class="hero-title glitch">RomeTats</h1>
+        <div class="hero-divider"></div>
+        <p class="hero-subtitle">Black &amp; Grey Realism · Horror · Custom Work</p>
+        <p class="hero-location">By Appointment Only</p>
+        <div class="hero-buttons">
+            <a href="#booking" class="btn-red">Book an Appointment</a>
+            <a href="#work" class="btn-ghost">View My Work</a>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="hero-scroll-bar"></div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="about-grid">
+        <div class="about-photo-wrap fade-in">
+            <div class="about-photo-box">
+                <!--
+                    ADD ARTIST PHOTO:
+                    Remove the placeholder below and add:
+                    <img src="rome-photo.jpg" alt="RomeTats">
+                -->
+                <span class="about-photo-icon">📷</span>
+                <span style="font-size:0.7rem;letter-spacing:1px;">Add Artist Photo</span>
+            </div>
+            <div class="about-corner tl"></div>
+            <div class="about-corner br"></div>
+        </div>
+        <div class="about-text fade-in delay-1">
+            <span class="section-tag">The Artist</span>
+            <h2>The Ink<br>Speaks<br class="flicker"> for Itself.</h2>
+            <p>I'm a tattoo artist out of a private studio in Clearlake, California. Black and grey realism is what I'm known for — horror, heavy portraits, the stuff that takes real time and real focus to get right.</p>
+            <p>I do it all, but this is where my heart is. Every piece I do is custom. You come in with an idea, we build something together, and it gets done right.</p>
+            <div class="about-tags">
+                <span class="about-tag">Black &amp; Grey</span>
+                <span class="about-tag">Realism</span>
+                <span class="about-tag">Horror</span>
+                <span class="about-tag">Custom Work</span>
+                <span class="about-tag">Custom Pieces</span>
+                <span class="about-tag">Clearlake, CA</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MY WORK -->
+<section id="work">
+    <div class="section-header fade-in">
+        <span class="section-tag">Portfolio</span>
+        <h2 class="section-title">My Work</h2>
+        <div class="blood-divider">
+            <div class="blood-line"></div>
+            <div class="blood-diamond"></div>
+            <div class="blood-line right"></div>
+        </div>
+    </div>
+    <div class="gallery-grid">
+        <!--
+            HOW TO ADD PHOTOS:
+            Inside each .gallery-item, add: <img src="your-photo.jpg" alt="Tattoo">
+            The placeholder will be hidden automatically once an img is present.
+            Recommended: save photos to the same folder as index.html, then use just the filename.
+            Example: <img src="tattoo1.jpg" alt="Black and Grey Skull">
+        -->
+        <div class="gallery-item fade-in">
+            <!-- <img src="tattoo1.jpg" alt="Tattoo"> -->
+            <div class="gallery-placeholder">
+                <span class="gallery-placeholder-icon">🩸</span>
+                <span>Add Photo</span>
+            </div>
+            <div class="gallery-overlay"><span class="gallery-overlay-text">RomeTats</span></div>
+        </div>
+        <div class="gallery-item fade-in delay-1">
+            <!-- <img src="tattoo2.jpg" alt="Tattoo"> -->
+            <div class="gallery-placeholder">
+                <span class="gallery-placeholder-icon">🩸</span>
+                <span>Add Photo</span>
+            </div>
+            <div class="gallery-overlay"><span class="gallery-overlay-text">RomeTats</span></div>
+        </div>
+        <div class="gallery-item fade-in delay-2">
+            <!-- <img src="tattoo3.jpg" alt="Tattoo"> -->
+            <div class="gallery-placeholder">
+                <span class="gallery-placeholder-icon">🩸</span>
+                <span>Add Photo</span>
+            </div>
+            <div class="gallery-overlay"><span class="gallery-overlay-text">RomeTats</span></div>
+        </div>
+        <div class="gallery-item fade-in delay-3">
+            <!-- <img src="tattoo4.jpg" alt="Tattoo"> -->
+            <div class="gallery-placeholder">
+                <span class="gallery-placeholder-icon">🩸</span>
+                <span>Add Photo</span>
+            </div>
+            <div class="gallery-overlay"><span class="gallery-overlay-text">RomeTats</span></div>
+        </div>
+        <div class="gallery-item fade-in">
+            <!-- <img src="tattoo5.jpg" alt="Tattoo"> -->
+            <div class="gallery-placeholder">
+                <span class="gallery-placeholder-icon">🩸</span>
+                <span>Add Photo</span>
+            </div>
+            <div class="gallery-overlay"><span class="gallery-overlay-text">RomeTats</span></div>
+        </div>
+        <div class="gallery-item fade-in delay-1">
+            <!-- <img src="tattoo6.jpg" alt="Tattoo"> -->
+            <div class="gallery-placeholder">
+                <span class="gallery-placeholder-icon">🩸</span>
+                <span>Add Photo</span>
+            </div>
+            <div class="gallery-overlay"><span class="gallery-overlay-text">RomeTats</span></div>
+        </div>
+        <div class="gallery-item fade-in delay-2">
+            <!-- <img src="tattoo7.jpg" alt="Tattoo"> -->
+            <div class="gallery-placeholder">
+                <span class="gallery-placeholder-icon">🩸</span>
+                <span>Add Photo</span>
+            </div>
+            <div class="gallery-overlay"><span class="gallery-overlay-text">RomeTats</span></div>
+        </div>
+        <div class="gallery-item fade-in delay-3">
+            <!-- <img src="tattoo8.jpg" alt="Tattoo"> -->
+            <div class="gallery-placeholder">
+                <span class="gallery-placeholder-icon">🩸</span>
+                <span>Add Photo</span>
+            </div>
+            <div class="gallery-overlay"><span class="gallery-overlay-text">RomeTats</span></div>
+        </div>
+    </div>
+    <div class="gallery-more fade-in">
+        <a href="https://www.instagram.com/rometats/" target="_blank" class="gallery-instagram">
+            <span>📸</span> See More on Instagram @rometats
+        </a>
+    </div>
+</section>
+
+<!-- STYLES -->
+<section id="styles">
+    <div class="section-header fade-in">
+        <span class="section-tag">Specialties</span>
+        <h2 class="section-title">What I Do</h2>
+        <div class="blood-divider">
+            <div class="blood-line"></div>
+            <div class="blood-diamond"></div>
+            <div class="blood-line right"></div>
+        </div>
+    </div>
+    <div class="styles-grid">
+        <div class="style-card fade-in">
+            <span class="style-icon">🩸</span>
+            <h3>Horror Realism</h3>
+            <p>Monsters, demons, dark figures, and nightmare fuel brought to life in stunning black and grey detail. If it haunts your dreams, Rome can put it on your skin.</p>
+        </div>
+        <div class="style-card fade-in delay-1">
+            <span class="style-icon">🖤</span>
+            <h3>Black &amp; Grey</h3>
+            <p>Masterful shading and contrast. No color needed when the depth of the work speaks for itself. Clean, precise, and built to last.</p>
+        </div>
+        <div class="style-card fade-in delay-2">
+            <span class="style-icon">🌑</span>
+            <h3>Atmospheric Portraits</h3>
+            <p>Moody, heavy portraits with real depth and character. The kind of piece that looks like it belongs in a painting — intense, precise, and built to turn heads.</p>
+        </div>
+    </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+    <div class="booking-bg"></div>
+    <div class="booking-inner">
+        <div class="section-header fade-in" style="margin-bottom:2rem;">
+            <span class="section-tag">Get Tattooed</span>
+            <h2 class="section-title">Book an Appointment</h2>
+            <div class="blood-divider">
+                <div class="blood-line"></div>
+                <div class="blood-diamond"></div>
+                <div class="blood-line right"></div>
+            </div>
+        </div>
+        <p class="fade-in" style="color:var(--light);line-height:1.9;margin-bottom:2.5rem;font-size:0.95rem;">
+            Call or text me with your idea and we'll go from there. I'll give you a price, we pick a day, and get it done. Simple as that.
+        </p>
+
+        <!-- BOOKING TABS -->
+        <div class="booking-tabs fade-in">
+            <button class="booking-tab active" onclick="switchTab('call')">Call / Text</button>
+            <button class="booking-tab" onclick="switchTab('form')">Send a Message</button>
+        </div>
+
+        <!-- TAB: CALL -->
+        <div class="booking-tab-panel" id="tab-call">
+            <a href="tel:7075303558" class="booking-phone">
+                <span class="booking-phone-icon">☎</span>
+                (707) 530-3558
+            </a>
+            <p class="booking-note">Call or text to book · Clearlake, CA · By appointment only<br>
+            DM on Instagram: <a href="https://www.instagram.com/rometats/" target="_blank" style="color:var(--red-bright);text-decoration:none;">@rometats</a></p>
+            <div class="booking-details">
+                <div class="booking-detail">
+                    <div class="booking-detail-label">Location</div>
+                    <div class="booking-detail-value">Clearlake, CA<br><span style="font-size:0.8rem;color:var(--gray);">(Address given upon booking)</span></div>
+                </div>
+                <div class="booking-detail">
+                    <div class="booking-detail-label">Studio</div>
+                    <div class="booking-detail-value">Private Studio</div>
+                </div>
+                <div class="booking-detail">
+                    <div class="booking-detail-label">Booking</div>
+                    <div class="booking-detail-value">By Appointment Only</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: CONTACT FORM -->
+        <div class="booking-tab-panel hidden" id="tab-form">
+            <form class="booking-form" id="booking-form">
+                <div class="bform-row">
+                    <div class="bform-group">
+                        <label>Your Name</label>
+                        <input type="text" placeholder="First & Last" required>
+                    </div>
+                    <div class="bform-group">
+                        <label>Phone / Instagram</label>
+                        <input type="text" placeholder="Best way to reach you">
+                    </div>
+                </div>
+                <div class="bform-group">
+                    <label>Tattoo Idea</label>
+                    <textarea placeholder="Tell me what you have in mind — size, placement, reference images if you have them..." required></textarea>
+                </div>
+                <div class="bform-group">
+                    <label>Placement</label>
+                    <select>
+                        <option value="" disabled selected>Where on your body?</option>
+                        <option>Arm / Sleeve</option>
+                        <option>Chest</option>
+                        <option>Back</option>
+                        <option>Leg</option>
+                        <option>Ribs</option>
+                        <option>Neck / Face</option>
+                        <option>Hand / Fingers</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="bform-submit">Send It →</button>
+            </form>
+            <div class="bform-success" id="bform-success">
+                ✓ Got it — I'll be in touch soon.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- EMAIL SIGNUP -->
+<section id="signup">
+    <div class="signup-inner fade-in">
+        <div class="signup-left">
+            <span class="section-tag">Stay in the Loop</span>
+            <h3 class="signup-title">Get on the List</h3>
+            <p class="signup-sub">Drop your email and I'll hit you with flash deals, open appointment slots, and the occasional discount. No spam, just the good stuff.</p>
+        </div>
+        <div class="signup-right">
+            <form class="signup-form" id="signup-form">
+                <input type="email" class="signup-input" placeholder="your@email.com" required>
+                <button type="submit" class="signup-btn">Sign Me Up</button>
+            </form>
+            <div class="signup-success" id="signup-success">✓ You're on the list.</div>
+            <p class="signup-fine">No spam. Unsubscribe any time.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">Rome<span>Tats</span></div>
+    <p class="footer-tagline">Black &amp; Grey Realism · Horror · Custom Work · Clearlake, CA</p>
+    <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#work">Portfolio</a>
+        <a href="#styles">Styles</a>
+        <a href="https://www.instagram.com/rometats/" target="_blank">Instagram</a>
+        <a href="tel:7075303558">(707) 530-3558</a>
+    </div>
+    <p class="footer-copy">© 2026 RomeTats · All Rights Reserved · Clearlake, California</p>
+</footer>
+
+<script>
+    // CUSTOM CURSOR
+    const cur = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0;
+
+    document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        cur.style.left = mx + 'px';
+        cur.style.top = my + 'px';
+        ring.style.left = mx + 'px';
+        ring.style.top = my + 'px';
+    });
+
+    document.querySelectorAll('a, button, .gallery-item, .style-card').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cur.style.width = '20px';
+            cur.style.height = '20px';
+            cur.style.background = '#ff2200';
+        });
+        el.addEventListener('mouseleave', () => {
+            cur.style.width = '12px';
+            cur.style.height = '12px';
+            cur.style.background = 'var(--red-bright)';
+        });
+    });
+
+    // NAV SCROLL
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // HAMBURGER
+    function toggleMenu() {
+        const links = document.querySelector('.nav-links');
+        const isOpen = links.style.display === 'flex';
+        if (isOpen) {
+            links.style.display = 'none';
+        } else {
+            Object.assign(links.style, {
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'absolute',
+                top: '65px',
+                right: '1.5rem',
+                background: 'rgba(8,8,8,0.98)',
+                padding: '1.5rem 2rem',
+                borderRadius: '2px',
+                border: '1px solid rgba(139,0,0,0.3)',
+                backdropFilter: 'blur(20px)',
+                gap: '1.5rem',
+                zIndex: '999'
+            });
+        }
+    }
+
+    // FADE IN OBSERVER
+    const fadeObs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+    // SMOKE / ASH PARTICLE CANVAS
+    const canvas = document.getElementById('smoke-canvas');
+    const ctx = canvas.getContext('2d');
+    let smokeParticles = [];
+
+    function resizeSmoke() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+
+    class SmokeParticle {
+        constructor() { this.reset(true); }
+        reset(init = false) {
+            this.x = Math.random() * canvas.width;
+            this.y = init ? Math.random() * canvas.height : canvas.height + 10;
+            this.size = Math.random() * 60 + 20;
+            this.speedY = -(Math.random() * 0.4 + 0.1);
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.opacity = 0;
+            this.targetOpacity = Math.random() * 0.07 + 0.02;
+            this.growing = true;
+            this.r = Math.floor(Math.random() * 30);
+        }
+        update() {
+            this.y += this.speedY;
+            this.x += this.speedX;
+            if (this.growing) {
+                this.opacity += 0.003;
+                if (this.opacity >= this.targetOpacity) this.growing = false;
+            } else {
+                this.opacity -= 0.001;
+            }
+            if (this.opacity <= 0 || this.y < -this.size) this.reset();
+        }
+        draw() {
+            const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+            grad.addColorStop(0, `rgba(${80 + this.r}, ${this.r}, ${this.r}, ${this.opacity})`);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.fill();
+        }
+    }
+
+    // Ash / ember particles
+    class AshParticle {
+        constructor() { this.reset(true); }
+        reset(init = false) {
+            this.x = Math.random() * canvas.width;
+            this.y = init ? Math.random() * canvas.height : canvas.height + 5;
+            this.size = Math.random() * 1.5 + 0.3;
+            this.speedY = -(Math.random() * 0.5 + 0.2);
+            this.speedX = (Math.random() - 0.5) * 0.5;
+            this.opacity = Math.random() * 0.4 + 0.1;
+            this.flicker = Math.random() * 0.02;
+        }
+        update() {
+            this.y += this.speedY;
+            this.x += this.speedX + Math.sin(this.y * 0.01) * 0.3;
+            this.opacity += (Math.random() - 0.5) * this.flicker;
+            this.opacity = Math.max(0.05, Math.min(0.6, this.opacity));
+            if (this.y < -5) this.reset();
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(180, 20, 0, ${this.opacity})`;
+            ctx.fill();
+        }
+    }
+
+    function initSmoke() {
+        const isMobile = window.innerWidth < 768;
+        smokeParticles = [
+            ...Array.from({ length: isMobile ? 6 : 18 }, () => new SmokeParticle()),
+            ...Array.from({ length: isMobile ? 25 : 80 }, () => new AshParticle())
+        ];
+    }
+
+    function animateSmoke() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        smokeParticles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animateSmoke);
+    }
+
+    window.addEventListener('resize', () => { resizeSmoke(); initSmoke(); });
+    resizeSmoke();
+    initSmoke();
+    animateSmoke();
+
+    // BOOKING TABS
+    function switchTab(tab) {
+        document.querySelectorAll('.booking-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.booking-tab-panel').forEach(p => p.classList.add('hidden'));
+        document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+        document.getElementById('tab-' + tab).classList.remove('hidden');
+    }
+
+    // BOOKING FORM
+    document.getElementById('booking-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        this.style.display = 'none';
+        document.getElementById('bform-success').style.display = 'block';
+    });
+
+    // EMAIL SIGNUP
+    document.getElementById('signup-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        this.style.display = 'none';
+        document.getElementById('signup-success').style.display = 'block';
+    });
+
+    // SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+            if (window.innerWidth < 768) {
+                document.querySelector('.nav-links').style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>
