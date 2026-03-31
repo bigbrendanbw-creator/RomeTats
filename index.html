@@ -153,6 +153,32 @@
             height: 100%;
         }
 
+        /* HERO SLIDESHOW (mobile only) */
+        .hero-slideshow {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+
+        .hero-slide.active { opacity: 1; }
+
+        .hero-slide::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+        }
+
         .hero-vignette {
             position: absolute;
             inset: 0;
@@ -1063,6 +1089,8 @@
 
             /* Hero */
             #hero { min-height: 100svh; }
+            #smoke-canvas { display: none; }
+            .hero-slideshow { display: block; }
             .hero-eyebrow { font-size: 0.65rem; letter-spacing: 3px; }
             .hero-divider { margin: 1rem auto; }
             .hero-subtitle { font-size: 0.72rem; letter-spacing: 2.5px; }
@@ -1158,6 +1186,16 @@
 <!-- HERO -->
 <section id="hero">
     <canvas id="smoke-canvas"></canvas>
+    <div class="hero-slideshow" id="heroSlideshow">
+        <div class="hero-slide active" style="background-image: url('images/tattoo1.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('images/tattoo2.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('images/tattoo3.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('images/tattoo4.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('images/tattoo5.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('images/tattoo6.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('images/tattoo7.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('images/tattoo8.jpg')"></div>
+    </div>
     <div class="hero-vignette"></div>
     <div class="hero-content">
         <div class="hero-eyebrow">Clearlake, California · Private Studio</div>
@@ -1588,6 +1626,19 @@
         this.style.display = 'none';
         document.getElementById('signup-success').style.display = 'block';
     });
+
+    // HERO SLIDESHOW (mobile only)
+    (function() {
+        const slides = document.querySelectorAll('.hero-slide');
+        if (!slides.length) return;
+        let current = 0;
+        function nextSlide() {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+        }
+        setInterval(nextSlide, 3500);
+    })();
 
     // SMOOTH SCROLL
     document.querySelectorAll('a[href^="#"]').forEach(a => {
